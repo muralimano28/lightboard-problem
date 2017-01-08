@@ -34,13 +34,24 @@ function changeCell(ev) {
 		row = id.split("-")[1],
 		col = id.split("-")[2];
 
-	$.post(serverURL + gameData.id + "/change/" + currentUserId, {"row": row, "col": col})
-		.done(function() {
-			console.log("successfully changed");
-		})
-		.fail(function(err) {
-			showErrorMsg(err.responseText);
-		})
+	// Check if lock is acquired by this user.
+	if (gameData.lock_status === 1 && gameData.locked_to === currentUserId) {
+		$.post(serverURL + gameData.id + "/change/" + currentUserId, {"row": row, "col": col})
+			.done(function() {
+				// Stop timer and reset the time.
+				if (timer) clearInterval(timer);
+				$("#timer").text("00");
+				// Change lock status field
+				gameData.lock_status = 0;
+				// Change locked to field
+				gameData.locked_to = null;
+			})
+			.fail(function(err) {
+				showErrorMsg(err.responseText);
+			})
+	} else {
+		showErrorMsg("Acquire lock to select a cell");
+	}
 }
 function startTimer(time, domNode) {
 	var seconds = time;

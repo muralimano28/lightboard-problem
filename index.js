@@ -132,10 +132,15 @@ App.post("/:id/change/:userId", (req, res) => {
 					// If existing value is 0 then make it as userValue.
 					// Else reset it to 0.
 					if (existingValue === 0) {
-						data[req.params.id].cells[row][col] = userValue;
+						data[id].cells[row][col] = userValue;
 					} else {
-						data[req.params.id].cells[row][col] = 0;
+						data[id].cells[row][col] = 0;
 					}
+
+					// reset locks.
+					data[id].lock_status = 0;
+					data[id].locked_to = null;
+
 					res.send("Successfully changed the value in the cell");
 				}
 			} else {
