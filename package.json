@@ -1,0 +1,17 @@
+{
+  "name": "lightboard-problem",
+  "version": "1.0.0",
+  "description": "Lightboard where two users can light the cells and dim the cells and it has a lock.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Muralimanohar.P",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
