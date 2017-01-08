@@ -8,14 +8,14 @@
 	</head>
 	<body>
 		<div id="loadingbar" class="hide">Loading bar</div>
+		<div class="error" id="errormsg"></div>
 		<div>
 			<form id="createform" onsubmit="return createGame(event)" method="post" >
 				<label for="username">Enter user name:</label>
 				<input type="text" placeholder="Please enter user name" id="username" required/>
-				<button type="submit">Create game</button>
+				<button id="submitbtn" type="submit">Create game</button>
 			</form>
 		</div>
-		<div class="error" id="errormsg"></div>
 		<div id="gameboard" class="hide">
 			<h1> Welcome <span id="playername"></span></h1>
 			<div>
@@ -29,7 +29,7 @@
 					</div>
 					<h2 id="timer">00</h2>
 				</div>
-				<div>
+				<div id="sharediv">
 					<p>Invite your friend to play with you</p>
 					<p id="sharelink"></p>
 				</div>
@@ -37,114 +37,124 @@
 			<table>
 				<tbody id="tablebody">
 					<tr>
-						<td id="cells-0-0" onclick="changeCell"></td>
-						<td id="cells-0-2" onclick="changeCell"></td>
-						<td id="cells-0-3" onclick="changeCell"></td>
-						<td id="cells-0-4" onclick="changeCell"></td>
-						<td id="cells-0-5" onclick="changeCell"></td>
-						<td id="cells-0-6" onclick="changeCell"></td>
-						<td id="cells-0-7" onclick="changeCell"></td>
-						<td id="cells-0-8" onclick="changeCell"></td>
-						<td id="cells-0-9" onclick="changeCell"></td>
+						<td id="cells-0-0" onclick="changeCell(event)"></td>
+						<td id="cells-0-1" onclick="changeCell(event)"></td>
+						<td id="cells-0-2" onclick="changeCell(event)"></td>
+						<td id="cells-0-3" onclick="changeCell(event)"></td>
+						<td id="cells-0-4" onclick="changeCell(event)"></td>
+						<td id="cells-0-5" onclick="changeCell(event)"></td>
+						<td id="cells-0-6" onclick="changeCell(event)"></td>
+						<td id="cells-0-7" onclick="changeCell(event)"></td>
+						<td id="cells-0-8" onclick="changeCell(event)"></td>
+						<td id="cells-0-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-1-0" onclick="changeCell"></td>
-						<td id="cells-1-2" onclick="changeCell"></td>
-						<td id="cells-1-3" onclick="changeCell"></td>
-						<td id="cells-1-4" onclick="changeCell"></td>
-						<td id="cells-1-5" onclick="changeCell"></td>
-						<td id="cells-1-6" onclick="changeCell"></td>
-						<td id="cells-1-7" onclick="changeCell"></td>
-						<td id="cells-1-8" onclick="changeCell"></td>
-						<td id="cells-1-9" onclick="changeCell"></td>
+						<td id="cells-1-0" onclick="changeCell(event)"></td>
+						<td id="cells-1-1" onclick="changeCell(event)"></td>
+						<td id="cells-1-2" onclick="changeCell(event)"></td>
+						<td id="cells-1-3" onclick="changeCell(event)"></td>
+						<td id="cells-1-4" onclick="changeCell(event)"></td>
+						<td id="cells-1-5" onclick="changeCell(event)"></td>
+						<td id="cells-1-6" onclick="changeCell(event)"></td>
+						<td id="cells-1-7" onclick="changeCell(event)"></td>
+						<td id="cells-1-8" onclick="changeCell(event)"></td>
+						<td id="cells-1-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-2-0" onclick="changeCell"></td>
-						<td id="cells-2-2" onclick="changeCell"></td>
-						<td id="cells-2-3" onclick="changeCell"></td>
-						<td id="cells-2-4" onclick="changeCell"></td>
-						<td id="cells-2-5" onclick="changeCell"></td>
-						<td id="cells-2-6" onclick="changeCell"></td>
-						<td id="cells-2-7" onclick="changeCell"></td>
-						<td id="cells-2-8" onclick="changeCell"></td>
-						<td id="cells-2-9" onclick="changeCell"></td>
+						<td id="cells-2-0" onclick="changeCell(event)"></td>
+						<td id="cells-2-1" onclick="changeCell(event)"></td>
+						<td id="cells-2-2" onclick="changeCell(event)"></td>
+						<td id="cells-2-3" onclick="changeCell(event)"></td>
+						<td id="cells-2-4" onclick="changeCell(event)"></td>
+						<td id="cells-2-5" onclick="changeCell(event)"></td>
+						<td id="cells-2-6" onclick="changeCell(event)"></td>
+						<td id="cells-2-7" onclick="changeCell(event)"></td>
+						<td id="cells-2-8" onclick="changeCell(event)"></td>
+						<td id="cells-2-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-3-0" onclick="changeCell"></td>
-						<td id="cells-3-2" onclick="changeCell"></td>
-						<td id="cells-3-3" onclick="changeCell"></td>
-						<td id="cells-3-4" onclick="changeCell"></td>
-						<td id="cells-3-5" onclick="changeCell"></td>
-						<td id="cells-3-6" onclick="changeCell"></td>
-						<td id="cells-3-7" onclick="changeCell"></td>
-						<td id="cells-3-8" onclick="changeCell"></td>
-						<td id="cells-3-9" onclick="changeCell"></td>
+						<td id="cells-3-0" onclick="changeCell(event)"></td>
+						<td id="cells-3-1" onclick="changeCell(event)"></td>
+						<td id="cells-3-2" onclick="changeCell(event)"></td>
+						<td id="cells-3-3" onclick="changeCell(event)"></td>
+						<td id="cells-3-4" onclick="changeCell(event)"></td>
+						<td id="cells-3-5" onclick="changeCell(event)"></td>
+						<td id="cells-3-6" onclick="changeCell(event)"></td>
+						<td id="cells-3-7" onclick="changeCell(event)"></td>
+						<td id="cells-3-8" onclick="changeCell(event)"></td>
+						<td id="cells-3-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-4-0" onclick="changeCell"></td>
-						<td id="cells-4-2" onclick="changeCell"></td>
-						<td id="cells-4-3" onclick="changeCell"></td>
-						<td id="cells-4-4" onclick="changeCell"></td>
-						<td id="cells-4-5" onclick="changeCell"></td>
-						<td id="cells-4-6" onclick="changeCell"></td>
-						<td id="cells-4-7" onclick="changeCell"></td>
-						<td id="cells-4-8" onclick="changeCell"></td>
-						<td id="cells-4-9" onclick="changeCell"></td>
+						<td id="cells-4-0" onclick="changeCell(event)"></td>
+						<td id="cells-4-1" onclick="changeCell(event)"></td>
+						<td id="cells-4-2" onclick="changeCell(event)"></td>
+						<td id="cells-4-3" onclick="changeCell(event)"></td>
+						<td id="cells-4-4" onclick="changeCell(event)"></td>
+						<td id="cells-4-5" onclick="changeCell(event)"></td>
+						<td id="cells-4-6" onclick="changeCell(event)"></td>
+						<td id="cells-4-7" onclick="changeCell(event)"></td>
+						<td id="cells-4-8" onclick="changeCell(event)"></td>
+						<td id="cells-4-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-5-0" onclick="changeCell"></td>
-						<td id="cells-5-2" onclick="changeCell"></td>
-						<td id="cells-5-3" onclick="changeCell"></td>
-						<td id="cells-5-4" onclick="changeCell"></td>
-						<td id="cells-5-5" onclick="changeCell"></td>
-						<td id="cells-5-6" onclick="changeCell"></td>
-						<td id="cells-5-7" onclick="changeCell"></td>
-						<td id="cells-5-8" onclick="changeCell"></td>
-						<td id="cells-5-9" onclick="changeCell"></td>
+						<td id="cells-5-0" onclick="changeCell(event)"></td>
+						<td id="cells-5-1" onclick="changeCell(event)"></td>
+						<td id="cells-5-2" onclick="changeCell(event)"></td>
+						<td id="cells-5-3" onclick="changeCell(event)"></td>
+						<td id="cells-5-4" onclick="changeCell(event)"></td>
+						<td id="cells-5-5" onclick="changeCell(event)"></td>
+						<td id="cells-5-6" onclick="changeCell(event)"></td>
+						<td id="cells-5-7" onclick="changeCell(event)"></td>
+						<td id="cells-5-8" onclick="changeCell(event)"></td>
+						<td id="cells-5-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-6-0" onclick="changeCell"></td>
-						<td id="cells-6-2" onclick="changeCell"></td>
-						<td id="cells-6-3" onclick="changeCell"></td>
-						<td id="cells-6-4" onclick="changeCell"></td>
-						<td id="cells-6-5" onclick="changeCell"></td>
-						<td id="cells-6-6" onclick="changeCell"></td>
-						<td id="cells-6-7" onclick="changeCell"></td>
-						<td id="cells-6-8" onclick="changeCell"></td>
-						<td id="cells-6-9" onclick="changeCell"></td>
+						<td id="cells-6-0" onclick="changeCell(event)"></td>
+						<td id="cells-6-1" onclick="changeCell(event)"></td>
+						<td id="cells-6-2" onclick="changeCell(event)"></td>
+						<td id="cells-6-3" onclick="changeCell(event)"></td>
+						<td id="cells-6-4" onclick="changeCell(event)"></td>
+						<td id="cells-6-5" onclick="changeCell(event)"></td>
+						<td id="cells-6-6" onclick="changeCell(event)"></td>
+						<td id="cells-6-7" onclick="changeCell(event)"></td>
+						<td id="cells-6-8" onclick="changeCell(event)"></td>
+						<td id="cells-6-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-7-0" onclick="changeCell"></td>
-						<td id="cells-7-2" onclick="changeCell"></td>
-						<td id="cells-7-3" onclick="changeCell"></td>
-						<td id="cells-7-4" onclick="changeCell"></td>
-						<td id="cells-7-5" onclick="changeCell"></td>
-						<td id="cells-7-6" onclick="changeCell"></td>
-						<td id="cells-7-7" onclick="changeCell"></td>
-						<td id="cells-7-8" onclick="changeCell"></td>
-						<td id="cells-7-9" onclick="changeCell"></td>
+						<td id="cells-7-0" onclick="changeCell(event)"></td>
+						<td id="cells-7-1" onclick="changeCell(event)"></td>
+						<td id="cells-7-2" onclick="changeCell(event)"></td>
+						<td id="cells-7-3" onclick="changeCell(event)"></td>
+						<td id="cells-7-4" onclick="changeCell(event)"></td>
+						<td id="cells-7-5" onclick="changeCell(event)"></td>
+						<td id="cells-7-6" onclick="changeCell(event)"></td>
+						<td id="cells-7-7" onclick="changeCell(event)"></td>
+						<td id="cells-7-8" onclick="changeCell(event)"></td>
+						<td id="cells-7-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-8-0" onclick="changeCell"></td>
-						<td id="cells-8-2" onclick="changeCell"></td>
-						<td id="cells-8-3" onclick="changeCell"></td>
-						<td id="cells-8-4" onclick="changeCell"></td>
-						<td id="cells-8-5" onclick="changeCell"></td>
-						<td id="cells-8-6" onclick="changeCell"></td>
-						<td id="cells-8-7" onclick="changeCell"></td>
-						<td id="cells-8-8" onclick="changeCell"></td>
-						<td id="cells-8-9" onclick="changeCell"></td>
+						<td id="cells-8-0" onclick="changeCell(event)"></td>
+						<td id="cells-8-1" onclick="changeCell(event)"></td>
+						<td id="cells-8-2" onclick="changeCell(event)"></td>
+						<td id="cells-8-3" onclick="changeCell(event)"></td>
+						<td id="cells-8-4" onclick="changeCell(event)"></td>
+						<td id="cells-8-5" onclick="changeCell(event)"></td>
+						<td id="cells-8-6" onclick="changeCell(event)"></td>
+						<td id="cells-8-7" onclick="changeCell(event)"></td>
+						<td id="cells-8-8" onclick="changeCell(event)"></td>
+						<td id="cells-8-9" onclick="changeCell(event)"></td>
 					</tr>
 					<tr>
-						<td id="cells-9-0" onclick="changeCell"></td>
-						<td id="cells-9-2" onclick="changeCell"></td>
-						<td id="cells-9-3" onclick="changeCell"></td>
-						<td id="cells-9-4" onclick="changeCell"></td>
-						<td id="cells-9-5" onclick="changeCell"></td>
-						<td id="cells-9-6" onclick="changeCell"></td>
-						<td id="cells-9-7" onclick="changeCell"></td>
-						<td id="cells-9-8" onclick="changeCell"></td>
-						<td id="cells-9-9" onclick="changeCell"></td>
+						<td id="cells-9-0" onclick="changeCell(event)"></td>
+						<td id="cells-9-1" onclick="changeCell(event)"></td>
+						<td id="cells-9-2" onclick="changeCell(event)"></td>
+						<td id="cells-9-3" onclick="changeCell(event)"></td>
+						<td id="cells-9-4" onclick="changeCell(event)"></td>
+						<td id="cells-9-5" onclick="changeCell(event)"></td>
+						<td id="cells-9-6" onclick="changeCell(event)"></td>
+						<td id="cells-9-7" onclick="changeCell(event)"></td>
+						<td id="cells-9-8" onclick="changeCell(event)"></td>
+						<td id="cells-9-9" onclick="changeCell(event)"></td>
 					</tr>
 				</tbody>
 			</table>
