@@ -1,0 +1,14 @@
+* {
+	box-sizing: border-box;
+}
+.error {
+	color: red;
+}
+.hide {
+	display: none !important;
+}
+table tr td {
+	width: 50px;
+	height: 50px;
+	border: 1px solid #EEEEEE;
+}

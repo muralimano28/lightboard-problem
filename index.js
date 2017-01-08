@@ -11,6 +11,7 @@ let data = {};
 
 // Mock data.
 const GAME_DATA = {
+	"id": "",
 	"users": {},
 	"cells": [],
 	"lock_status": 0, // [0-means unlocked, 1-means locked]
@@ -19,6 +20,11 @@ const GAME_DATA = {
 
 // Loading middlewares.
 App.use(BodyParser.urlencoded({ extended: true }));
+App.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+});
 
 App.listen(3000, () => {
 	console.log("Listening at port 3000");
@@ -33,27 +39,27 @@ App.listen(3000, () => {
 App.post("/create", (req, res) => {
 	if (!req.body.username) {
 		res.status(400).send("Username cannot be empty. Please give a username");
-	}
-	let id = new Date().getTime(),
-		userId = new Date().getTime() + 10,
-		resData = {};
+	} else {
+		let id = new Date().getTime(),
+			userId = new Date().getTime() + 10;
 
-	data[id] = JSON.parse(JSON.stringify(GAME_DATA));
-	data[id].users[userId] = {
-		"name": req.body.username
-	}
-
-	// Create 10x10 matrix.
-	for (let i = 0; i < 10; i++) {
-		let eachRow = [];
-		for (let j = 0; j < 10; j++) {
-			eachRow.push(0);
+		data[id] = JSON.parse(JSON.stringify(GAME_DATA));
+		data[id].id = id;
+		data[id].users[userId] = {
+			"name": req.body.username
 		}
-		data[id].cells.push(eachRow);
-	}
 
-	resData[id] = data[id];
-	res.send(resData);
+		// Create 10x10 matrix.
+		for (let i = 0; i < 10; i++) {
+			let eachRow = [];
+			for (let j = 0; j < 10; j++) {
+				eachRow.push(0);
+			}
+			data[id].cells.push(eachRow);
+		}
+
+		res.send(data[id]);
+	}
 });
 
 // Route to handle user joining existing game.
@@ -77,15 +83,13 @@ App.post("/:id/join", (req, res) => {
 				res.status(400).send("Username cannot be empty. Please give a username");
 			}
 			// Create second user in the game.
-			let userId = new Date().getTime(),
-				resData = {};
+			let userId = new Date().getTime();
 
 			data[id].users[userId] = {
 				"name": req.body.username
 			};
 
-			resData[req.params.id] = data[req.params.id];
-			res.send(resData);
+			res.send(data[req.params.id]);
 		}
 	} else {
 		res.status(400).send("Game id doesn't exist. Please create a new game");
