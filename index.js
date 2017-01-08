@@ -7,12 +7,15 @@ let App = Express();
 
 // Dataset.
 // Note: Using local variable instead of database.
+let data = {};
+
+// Mock data.
 const GAME_DATA = {
 	"users": {},
+	"cells": [],
 	"lock_status": 0, // [0-means unlocked, 1-means locked]
 	"locked_to": ""
 };
-let data = {};
 
 // Loading middlewares.
 App.use(BodyParser.urlencoded({ extended: true }));
@@ -28,9 +31,12 @@ App.listen(3000, () => {
  * }
  */
 App.post("/create", (req, res) => {
-	console.log("creating a new game");
+	if (!req.body.username) {
+		res.status(400).send("Username cannot be empty. Please give a username");
+	}
 	let id = new Date().getTime(),
-		userId = new Date().getTime() + 10;
+		userId = new Date().getTime() + 10,
+		resData = {};
 
 	data[id] = JSON.parse(JSON.stringify(GAME_DATA));
 	data[id].users[userId] = {
@@ -46,8 +52,8 @@ App.post("/create", (req, res) => {
 		data[id].cells.push(eachRow);
 	}
 
-	console.log("data[id].cells: ", data[id].cells);
-	res.send(data[id]);
+	resData[id] = data[id];
+	res.send(resData);
 });
 
 // Route to handle user joining existing game.
@@ -57,21 +63,36 @@ App.post("/create", (req, res) => {
  * }
  */
 App.post("/:id/join", (req, res) => {
-	if (Object.keys(data[req.params.id].users).length === 2) {
-		res.status(400).send("Sorry, only two people can play this game.");
-	} else {
-		// Create second user in the game.
-		let userId = new Date().getTime();
-		data[req.params.id].users[userId] = {
-			"name": req.body.username
-		};
+	let id = req.params.id;
 
-		res.send(data[req.params.id]);
+	if (data[id]) {
+		// Check if users limit has reached.
+		let users = data[id].users,
+			userLength = Object.keys(users).length;
+
+		if (userLength === 2) {
+			res.status(400).send("Sorry, only two people can play this game");
+		} else {
+			if (!req.body.username) {
+				res.status(400).send("Username cannot be empty. Please give a username");
+			}
+			// Create second user in the game.
+			let userId = new Date().getTime(),
+				resData = {};
+
+			data[id].users[userId] = {
+				"name": req.body.username
+			};
+
+			resData[req.params.id] = data[req.params.id];
+			res.send(resData);
+		}
+	} else {
+		res.status(400).send("Game id doesn't exist. Please create a new game");
 	}
 });
 
 App.get("/:id", (req, res) => {
-	console.log("sending-data");
 	if (data[req.params.id]) {
 		res.send(data[req.params.id]);
 	} else {
@@ -89,38 +110,78 @@ App.post("/:id/change/:userId", (req, res) => {
 	let id = req.params.id,
 		userId = req.params.userId,
 		row = req.body.row,
-		col = req.body.col,
-		userValue = Object.keys(data[id].users).indexOf(userId) + 1,
-		existingValue = data[id].cells[row][col];
+		col = req.body.col;
 
-	// If existing value is 0 then make it as userValue.
-	// Else reset it to 0.
-	if (existingValue === 0) {
-		data[req.params.id].cells[row][col] = userValue;
+	if (data[id]) {
+		if (!data[id].users[userId]) {
+			res.status(400).send("Invalid user id");
+		} else {
+			// lock status should be locked and it should be locked to the user who is making the change.
+			if (data[id].lock_status === 1 && data[id].locked_to === userId) {
+				if ((!row && row !== 0 ) || (!col && col !== 0) || row < -1 || row >= 10 || col < -1 || col >= 10) {
+					res.status(400).send("Incorrect row or col value.");
+				} else {
+
+					let userValue = Object.keys(data[id].users).indexOf(userId) + 1,
+						existingValue = data[id].cells[row][col];
+
+					// If existing value is 0 then make it as userValue.
+					// Else reset it to 0.
+					if (existingValue === 0) {
+						data[req.params.id].cells[row][col] = userValue;
+					} else {
+						data[req.params.id].cells[row][col] = 0;
+					}
+					res.send("Successfully changed the value in the cell");
+				}
+			} else {
+				res.status(400).send("You don't have the lock. Please acquire the lock to make changes");
+			}
+		}
 	} else {
-		data[req.params.id].cells[row][col] = 0;
+		res.status(400).send("Game id doesn't exist. Please create a new game");
 	}
 
-	console.log("user: " + userId + " changed value at " + row + " and " + col);
-	// Ending the response instead of sending data because, for every 150ms front-end will make a request to get data.
-	res.end();
 });
 
 App.post("/:id/getlock/:userId", (req, res) => {
-	data[req.params.id].lock_status = 1;
-	data[req.params.id].locked_to = req.params.userId;
+	let id = req.params.id,
+		userId = req.params.userId;
 
-	console.log("locked to " + req.params.userId);
-	// Ending the response instead of sending data because, for every 150ms front-end will make a request to get data.
-	res.end();
+	if (data[id]) {
+		if (data[id].users[userId]) {
+			// If lock status is 0(ie: unlocked), then lock it to requesting user.
+			// Else return error that it cannot be locked.
+			if (data[id].lock_status === 0) {
+				data[id].lock_status = 1;
+				data[id].locked_to = req.params.userId;
+
+				res.status(200).send("Successfully acquired the lock");
+			} else {
+				res.status(400).send("You can't acquired the lock, since it is already acquired by the other user");
+			}
+		} else {
+			res.status(400).send("Invalid user id.");
+		}
+	} else {
+		res.status(400).send("Invalid game id. Please create a new game");
+	}
 });
 
 App.post("/:id/release", (req, res) => {
-	data[req.params.id].lock_status = 0;
-	data[req.params.id].locked_to = null;
+	let id = req.params.id;
 
-	console.log("released lock");
-	console.log("data: ", data[req.param.id]);
-	// Ending the response instead of sending data because, for every 150ms front-end will make a request to get data.
-	res.end();
+	if (data[id]) {
+		// If lock status is "locked"(ie: 1) then release the lock.
+		if (data[id].lock_status === 1) {
+			data[id].lock_status = 0;
+			data[id].locked_to = null;
+
+			res.status(200).send("Succssfully released the lock");
+		} else {
+			res.status(400).send("Lock is already released");
+		}
+	} else {
+		res.status(400).send("Invalid game id. Please create a new game");
+	}
 });
